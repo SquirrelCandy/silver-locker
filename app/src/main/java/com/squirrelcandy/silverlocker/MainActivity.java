@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     TextView tvItem;
     ArrayList<String> items;
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         items.add("bulbasaur");
         items.add("squirtle");
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, items);
         listView.setAdapter(adapter);
 
@@ -43,7 +44,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),value,Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
-
+    public void addItem(View v) {
+        items.add("vulpix");
+        adapter.notifyDataSetChanged();
     }
 }
