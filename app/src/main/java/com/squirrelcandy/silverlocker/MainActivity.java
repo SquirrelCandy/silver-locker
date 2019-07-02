@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                addItem(view);
                 Snackbar.make(view, "Action Placeholder", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
