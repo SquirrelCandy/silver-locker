@@ -27,7 +27,7 @@ public class ViewActivity extends AppCompatActivity {
             name = bundle.getString("ITEM_NAME");
         }
 
-        tvID.setText(id);
+        tvID.setText(String.valueOf(id));
         tvName.setText(name);
     }
 }
