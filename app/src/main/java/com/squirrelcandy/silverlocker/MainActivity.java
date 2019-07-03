@@ -1,5 +1,6 @@
 package com.squirrelcandy.silverlocker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String value = position + ": " + adapter.getItem(position);
-                Snackbar.make(view, value, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent viewAct = new Intent(MainActivity.this, ViewActivity.class);
+                viewAct.putExtra("ITEM_ID", position);
+                viewAct.putExtra("ITEM_NAME", adapter.getItem(position));
+                startActivity(viewAct);
             }
         });
 
