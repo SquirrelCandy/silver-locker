@@ -1,6 +1,7 @@
 package com.squirrelcandy.silverlocker;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -49,10 +50,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View view, int pos, long id) {
+                Log.v("long clicked","pos: " + pos);
+                deleteItem(view, pos);
+                return true;
+            }
+        });
+
         FloatingActionButton fab = findViewById(R.id.fabAdd);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                addItem(view);
                 Snackbar.make(view, "Action Placeholder", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -61,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void addItem(View v) {
         items.add("vulpix");
+        adapter.notifyDataSetChanged();
+    }
+
+    public void deleteItem(View v, int pos) {
+        items.remove(pos);
         adapter.notifyDataSetChanged();
     }
 }
