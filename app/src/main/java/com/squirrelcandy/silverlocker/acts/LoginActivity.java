@@ -1,4 +1,4 @@
-package com.squirrelcandy.silverlocker;
+package com.squirrelcandy.silverlocker.acts;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.squirrelcandy.silverlocker.R;
 
 public class LoginActivity extends AppCompatActivity {
 

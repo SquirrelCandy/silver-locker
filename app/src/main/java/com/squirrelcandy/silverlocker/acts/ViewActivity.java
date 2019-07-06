@@ -1,9 +1,11 @@
-package com.squirrelcandy.silverlocker;
+package com.squirrelcandy.silverlocker.acts;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.squirrelcandy.silverlocker.R;
 
 public class ViewActivity extends AppCompatActivity {
 
