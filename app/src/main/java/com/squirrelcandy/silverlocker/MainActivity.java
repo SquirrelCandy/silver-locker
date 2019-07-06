@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View view, int pos, long id) {
                 Log.v("long clicked","pos: " + pos);
-                deleteItem(view, pos);
+                deleteItem(pos);
                 return true;
             }
         });
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void deleteItem(View v, int pos) {
+    public void deleteItem(int pos) {
         items.remove(pos);
         adapter.notifyDataSetChanged();
     }
