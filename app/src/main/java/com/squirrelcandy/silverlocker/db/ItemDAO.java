@@ -25,8 +25,7 @@ public class ItemDAO {
         content.put(itemDB.USERNAME, item.getUsername());
         content.put(itemDB.EMAIL, item.getEmail());
         content.put(itemDB.PASSWORD, item.getPassword());
-        long newID = db.insert(itemDB.TABLE_NAME, null , content);
-        return newID;
+        return db.insert(itemDB.TABLE_NAME, null , content);
     }
 
     public ArrayList<Item> readAllItems() {
