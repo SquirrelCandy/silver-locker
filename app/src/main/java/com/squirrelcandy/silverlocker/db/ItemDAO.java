@@ -31,7 +31,7 @@ public class ItemDAO {
 
     public ArrayList<Item> readAllItems() {
         SQLiteDatabase db = itemDB.getWritableDatabase();
-        String[] columns = {itemDB.UID, itemDB.NAME, itemDB.PASSWORD};
+        String[] columns = {itemDB.UID, itemDB.NAME, itemDB.USERNAME, itemDB.EMAIL, itemDB.PASSWORD};
         Cursor cursor = db.query(itemDB.TABLE_NAME, columns,null,null,null,null,null);
         ArrayList<Item> items = new ArrayList<>();
 
