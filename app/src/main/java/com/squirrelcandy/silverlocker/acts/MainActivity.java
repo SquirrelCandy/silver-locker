@@ -13,15 +13,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squirrelcandy.silverlocker.R;
+import com.squirrelcandy.silverlocker.db.ItemDAO;
+import com.squirrelcandy.silverlocker.models.Item;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listView;
-    TextView tvItem;
-    ArrayList<String> items;
-    ArrayAdapter<String> adapter;
+    private ListView listView;
+    private TextView tvItem;
+    private ArrayAdapter<String> adapter;
+    private ArrayList<Item> items;
+    private ArrayList<String> itemNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +33,17 @@ public class MainActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.listView);
         tvItem = findViewById(R.id.tvItem);
-        items = new ArrayList<>();
 
-        items.add("pikachu");
-        items.add("charmander");
-        items.add("bulbasaur");
-        items.add("squirtle");
+        ItemDAO dao = new ItemDAO(getApplicationContext());
+        items = dao.readAllItems();
+
+        itemNames = new ArrayList<>();
+        for (int i=0; i < items.size(); i++) {
+            itemNames.add(items.get(i).getName());
+        }
 
         adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, items);
+                android.R.layout.simple_list_item_1, android.R.id.text1, itemNames);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -71,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void deleteItem(int pos) {
-        items.remove(pos);
+        itemNames.remove(pos);
         adapter.notifyDataSetChanged();
     }
 }

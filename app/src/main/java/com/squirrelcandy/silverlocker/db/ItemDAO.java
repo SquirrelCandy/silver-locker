@@ -69,6 +69,15 @@ public class ItemDAO {
         return db.delete(itemDB.TABLE_NAME , itemDB.UID +" = ?", whereArgs);
     }
 
+    /**
+     * Truncates all items from the item table and returns number of items deleted
+     * @return number of all items deleted from table
+     */
+    public int deleteAllItems() {
+        SQLiteDatabase db = itemDB.getWritableDatabase();
+        return db.delete(itemDB.TABLE_NAME, "1", null);
+    }
+
     static class SqliteAdapter extends SQLiteOpenHelper {
         private Context context;
         private static final String DATABASE_NAME = "SilverLocker";
