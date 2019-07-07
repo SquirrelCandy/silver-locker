@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View view, int pos, long id) {
-                Log.v("long clicked","pos: " + pos);
+                Log.d("long clicked","pos: " + pos);
                 deleteItem(pos);
                 return true;
             }
@@ -76,7 +76,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void deleteItem(int pos) {
-        itemNames.remove(pos);
-        adapter.notifyDataSetChanged();
+        ItemDAO dao = new ItemDAO(getApplicationContext());
+        for (int i=0; i < items.size(); i++) {
+            if (items.get(i).getName().equals(itemNames.get(pos))) {
+                dao.deleteItemByID(items.get(i).getUid());
+                items.remove(i);
+                itemNames.remove(pos);
+                adapter.notifyDataSetChanged();
+                break;
+            }
+        }
     }
 }
