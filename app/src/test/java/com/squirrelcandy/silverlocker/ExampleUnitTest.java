@@ -1,5 +1,8 @@
 package com.squirrelcandy.silverlocker;
 
+import com.squirrelcandy.silverlocker.db.ItemDAO;
+import com.squirrelcandy.silverlocker.models.Item;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;

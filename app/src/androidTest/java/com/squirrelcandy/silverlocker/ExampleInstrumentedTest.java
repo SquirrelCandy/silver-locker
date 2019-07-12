@@ -5,6 +5,9 @@ import android.content.Context;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 
+import com.squirrelcandy.silverlocker.db.ItemDAO;
+import com.squirrelcandy.silverlocker.models.Item;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,5 +26,19 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.squirrelcandy.silverlocker", appContext.getPackageName());
+    }
+
+    @Test
+    public void dbWriteTest() {
+        Item item = new Item();
+        item.setName("Test Name");
+        item.setUsername("Tester");
+        item.setEmail("test@test.com");
+        item.setPassword("password");
+
+        ItemDAO dao = new ItemDAO(InstrumentationRegistry.getTargetContext());
+        int uid = (int) dao.saveItem(item);
+        System.out.println("New UID = " + uid);
+        assertTrue(uid > 0);
     }
 }
