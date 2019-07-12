@@ -29,7 +29,7 @@ public class ItemDAO {
     }
 
     public ArrayList<Item> readAllItems() {
-        SQLiteDatabase db = itemDB.getWritableDatabase();
+        SQLiteDatabase db = itemDB.getReadableDatabase();
         String[] columns = {itemDB.UID, itemDB.NAME, itemDB.USERNAME, itemDB.EMAIL, itemDB.PASSWORD};
         Cursor cursor = db.query(itemDB.TABLE_NAME, columns,null,null,null,null,null);
         ArrayList<Item> items = new ArrayList<>();
@@ -46,6 +46,24 @@ public class ItemDAO {
         return items;
     }
 
+    public Item findItemByName(String name) {
+        SQLiteDatabase db = itemDB.getReadableDatabase();
+        String[] columns = {itemDB.UID, itemDB.NAME, itemDB.USERNAME, itemDB.EMAIL, itemDB.PASSWORD};
+        String whereClause = itemDB.NAME + " = ? ";
+        String[] whereArgs = { name };
+        Cursor cursor = db.query(itemDB.TABLE_NAME, columns, whereClause, whereArgs,null,null,null);
+
+        Item item = new Item();
+        if (cursor.moveToNext()) {
+            item.setUid(cursor.getInt(cursor.getColumnIndex(itemDB.UID)));
+            item.setName(cursor.getString(cursor.getColumnIndex(itemDB.NAME)));
+            item.setUsername(cursor.getString(cursor.getColumnIndex(itemDB.USERNAME)));
+            item.setEmail(cursor.getString(cursor.getColumnIndex(itemDB.EMAIL)));
+            item.setPassword(cursor.getString(cursor.getColumnIndex(itemDB.PASSWORD)));
+        }
+        return item;
+    }
+
     public int updateItem(Item item) {
         SQLiteDatabase db = itemDB.getWritableDatabase();
         ContentValues content = new ContentValues();
@@ -53,8 +71,8 @@ public class ItemDAO {
         content.put(itemDB.USERNAME, item.getUsername());
         content.put(itemDB.EMAIL, item.getEmail());
         content.put(itemDB.PASSWORD, item.getPassword());
-        String[] whereArgs= { String.valueOf(item.getUid()) };
-        return db.update(itemDB.TABLE_NAME, content, itemDB.UID +" = ?",whereArgs );
+        String[] whereArgs = { String.valueOf(item.getUid()) };
+        return db.update(itemDB.TABLE_NAME, content, itemDB.UID +" = ?", whereArgs);
     }
 
     /**

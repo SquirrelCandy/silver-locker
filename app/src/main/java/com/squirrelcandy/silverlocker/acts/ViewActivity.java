@@ -6,11 +6,16 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.squirrelcandy.silverlocker.R;
+import com.squirrelcandy.silverlocker.db.ItemDAO;
+import com.squirrelcandy.silverlocker.models.Item;
 
 public class ViewActivity extends AppCompatActivity {
 
-    TextView tvID;
-    TextView tvName;
+    private TextView tvID;
+    private TextView tvName;
+    private TextView tvUsername;
+    private TextView tvEmail;
+    private TextView tvPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,17 +24,28 @@ public class ViewActivity extends AppCompatActivity {
 
         tvID = findViewById(R.id.tvId);
         tvName = findViewById(R.id.tvName);
+        tvUsername = findViewById(R.id.tvUsername);
+        tvEmail = findViewById(R.id.tvEmail);
+        tvPassword = findViewById(R.id.tvPassword);
 
-        int id = -1;
+        int pos = -1;
         String name = "NAME";
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            id = bundle.getInt("ITEM_ID");
+            pos = bundle.getInt("ITEM_POS");
             name = bundle.getString("ITEM_NAME");
         }
 
-        tvID.setText(String.valueOf(id));
-        tvName.setText(name);
+        ItemDAO dao = new ItemDAO(getApplicationContext());
+        Item item = dao.findItemByName(name);
+
+        if (item != null && item.getUid() != 0) {
+            tvID.setText(String.valueOf(item.getUid()));
+            tvName.setText(item.getName());
+            tvUsername.setText(item.getUsername());
+            tvEmail.setText(item.getEmail());
+            tvPassword.setText(item.getPassword());
+        }
     }
 }
