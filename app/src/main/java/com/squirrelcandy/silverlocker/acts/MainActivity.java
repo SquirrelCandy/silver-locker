@@ -3,6 +3,9 @@ package com.squirrelcandy.silverlocker.acts;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, itemNames);
         listView.setAdapter(adapter);
+        registerForContextMenu(listView);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -53,15 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 viewAct.putExtra("ITEM_POS", position);
                 viewAct.putExtra("ITEM_NAME", adapter.getItem(position));
                 startActivity(viewAct);
-            }
-        });
-
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View view, int pos, long id) {
-                Log.d("long clicked","pos: " + pos);
-                deleteItem(pos);
-                return true;
             }
         });
 
@@ -75,16 +70,42 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void deleteItem(int pos) {
-        ItemDAO dao = new ItemDAO(getApplicationContext());
-        for (int i=0; i < items.size(); i++) {
-            if (items.get(i).getName().equals(itemNames.get(pos))) {
-                dao.deleteItemByID(items.get(i).getUid());
-                items.remove(i);
-                itemNames.remove(pos);
-                adapter.notifyDataSetChanged();
-                break;
-            }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.listView) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_context_item, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch(item.getItemId()) {
+            case R.id.view:
+                Intent viewAct = new Intent(MainActivity.this, ViewActivity.class);
+                viewAct.putExtra("ITEM_POS", info.position);
+                viewAct.putExtra("ITEM_NAME", adapter.getItem(info.position));
+                startActivity(viewAct);
+                return true;
+            case R.id.edit:
+                // edit stuff here
+                return true;
+            case R.id.delete:
+                ItemDAO dao = new ItemDAO(getApplicationContext());
+                for (int i=0; i < items.size(); i++) {
+                    if (items.get(i).getName().equals(itemNames.get(info.position))) {
+                        dao.deleteItemByID(items.get(i).getUid());
+                        items.remove(i);
+                        itemNames.remove(info.position);
+                        adapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+                return true;
+            default:
+                return super.onContextItemSelected(item);
         }
     }
 }
