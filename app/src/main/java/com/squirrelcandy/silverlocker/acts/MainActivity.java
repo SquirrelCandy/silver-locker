@@ -98,9 +98,14 @@ public class MainActivity extends AppCompatActivity {
     private void toggleFabMenu() {
         if (isFABOpen) {
             isFABOpen = false;
-            fabAdd.animate().translationY(-55);
-            fabImport.animate().translationY(-105);
-            fabExport.animate().translationY(-155);
+            fabAdd.animate().translationY(-200);
+            fabImport.animate().translationY(-200);
+            fabExport.animate().translationY(-200);
+
+            fabAdd.animate().translationY(-200);
+            fabImport.animate().translationY(-200);
+            fabExport.animate().translationY(-200);
+
         } else {
             isFABOpen = true;
             fabAdd.animate().translationY(0);

@@ -7,21 +7,6 @@
     tools:context=".acts.MainActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabMenu"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="5dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="45dp"
         android:layout_height="45dp"
@@ -69,6 +54,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@android:drawable/ic_dialog_map" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabMenu"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="5dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
 
     <ListView
         android:id="@+id/listView"
