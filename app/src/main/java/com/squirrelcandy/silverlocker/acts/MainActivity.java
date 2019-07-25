@@ -34,10 +34,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int REQUEST_WRITE_STORAGE = 112;
     private ListView listView;
-    private TextView tvItem;
+    private FloatingActionButton fabAdd, fabImport, fabExport;
     private ArrayAdapter<String> adapter;
     private ArrayList<Item> items;
     private ArrayList<String> itemNames;
+    private boolean isFABOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = findViewById(R.id.listView);
-        tvItem = findViewById(R.id.tvItem);
 
         ItemDAO dao = new ItemDAO(getApplicationContext());
         items = dao.readAllItems();
@@ -70,14 +70,56 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = findViewById(R.id.fabAdd);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fabMenu = findViewById(R.id.fabMenu);
+        fabAdd = findViewById(R.id.fabAdd);
+        fabImport = findViewById(R.id.fabImport);
+        fabExport = findViewById(R.id.fabExport);
+
+        fabMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleFabMenu();
+            }
+        });
+
+        fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent addIntent = new Intent(MainActivity.this, AddItemActivity.class);
                 startActivity(addIntent);
             }
         });
+
+        fabImport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO import code
+            }
+        });
+
+        fabExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO export code
+            }
+        });
+    }
+
+    private void toggleFabMenu() {
+        if (isFABOpen) {
+            isFABOpen = false;
+            fabAdd.animate().translationY(-150);
+            fabImport.animate().translationX(-130);
+            fabImport.animate().translationY(-130);
+            fabExport.animate().translationX(-150);
+
+        } else {
+            isFABOpen = true;
+            fabAdd.animate().translationY(0);
+            fabImport.animate().translationX(0);
+            fabImport.animate().translationY(0);
+            fabExport.animate().translationX(0);
+        }
     }
 
     @Override
