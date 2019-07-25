@@ -1,9 +1,6 @@
 package com.squirrelcandy.silverlocker.acts;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -12,11 +9,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squirrelcandy.silverlocker.R;
@@ -24,13 +18,9 @@ import com.squirrelcandy.silverlocker.db.ItemDAO;
 import com.squirrelcandy.silverlocker.models.Item;
 
 import java.util.ArrayList;
-import java.util.prefs.Preferences;
-
-import static com.squirrelcandy.silverlocker.models.DataManager.REQUEST_WRITE_STORAGE;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int REQUEST_WRITE_STORAGE = 112;
     private ListView listView;
     private FloatingActionButton fabAdd, fabImport, fabExport;
     private ArrayAdapter<String> adapter;
@@ -159,28 +149,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void requestPermission(Activity context) {
-        boolean hasPermission = (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-        if (!hasPermission) {
-            ActivityCompat.requestPermissions(context,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_WRITE_STORAGE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode) {
-            case Preferences.REQUEST_WRITE_STORAGE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "The app was allowed to write to your storage!", Toast.LENGTH_LONG).show();
-                    // Reload the activity with permission granted or use the features what required the permission
-                } else {
-                    Toast.makeText(this, "The app was not allowed to write to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
+//    private void requestPermission(Activity context) {
+//        boolean hasPermission = (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+//        if (!hasPermission) {
+//            ActivityCompat.requestPermissions(context,
+//                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+//                    REQUEST_WRITE_STORAGE);
+//        }
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//
+//        if (requestCode == Preferences.)
+//        switch (requestCode) {
+//            case Preferences.REQUEST_WRITE_STORAGE: {
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    Toast.makeText(this, "The app was allowed to write to your storage!", Toast.LENGTH_LONG).show();
+//                    // Reload the activity with permission granted or use the features what required the permission
+//                } else {
+//                    Toast.makeText(this, "The app was not allowed to write to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        }
+//    }
 }
