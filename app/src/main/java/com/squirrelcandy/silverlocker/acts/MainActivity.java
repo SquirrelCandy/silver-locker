@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squirrelcandy.silverlocker.R;
 import com.squirrelcandy.silverlocker.db.ItemDAO;
+import com.squirrelcandy.silverlocker.models.DataManager;
 import com.squirrelcandy.silverlocker.models.Item;
 
 import java.util.ArrayList;
@@ -88,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
         fabExport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO export code
+                DataManager data = new DataManager();
+                data.exportCsvToExternalStorage(getApplicationContext());
             }
         });
     }
