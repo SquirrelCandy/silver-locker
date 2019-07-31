@@ -1,7 +1,10 @@
 package com.squirrelcandy.silverlocker.models;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+
+import com.squirrelcandy.silverlocker.db.ItemDAO;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
@@ -33,31 +37,34 @@ public class DataManager {
             // Can't read or write
             mExternalStorageAvailable = mExternalStorageWriteable = false;
         }
-        tv.append("\n\nExternal Media: readable="
-                +mExternalStorageAvailable+" writable="+mExternalStorageWriteable);
     }
 
-    public void writeToSDFile(){
-
-        // Find the root of the external storage.
-        // See http://developer.android.com/guide/topics/data/data-  storage.html#filesExternal
-
+    public void exportCsvToExternalStorage(Context appContext){
         File root = android.os.Environment.getExternalStorageDirectory();
-
-        // See http://stackoverflow.com/questions/3551821/android-write-to-sd-card-folder
-
-        File dir = new File (root.getAbsolutePath() + "/download");
+        File dir = new File (root.getAbsolutePath() + "/SilverLocker");
         dir.mkdirs();
-        File file = new File(dir, "myData.txt");
+        File file = new File(dir, "locket.txt");
+
+        ItemDAO dao = new ItemDAO(appContext);
+        ArrayList<Item> items = dao.readAllItems();
+        StringBuffer sb = new StringBuffer();
+
+        if (items.size() > 0) {
+            sb.append("name|username|email|password\n");
+            for (int i=0; i <= items.size(); i++) {
+                Item item = items.get(i);
+                sb.append(item.getName()).append("|").append(item.getUsername()).append("|")
+                        .append(item.getEmail()).append("|").append(item.getPassword()).append("\n");
+            }
+        } else {
+            sb.append("NO_ITEMS_FOUND");
+        }
 
         try {
-            FileOutputStream f = new FileOutputStream(file);
-            PrintWriter pw = new PrintWriter(f);
-            pw.println("Hi , How are you");
-            pw.println("Hello");
-            pw.flush();
-            pw.close();
-            f.close();
+            FileOutputStream outputStream = new FileOutputStream(file);
+            outputStream.write(sb.toString().getBytes());
+            outputStream.close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Log.i(TAG, "******* File not found. Did you" +
@@ -91,6 +98,4 @@ public class DataManager {
 //            e.printStackTrace();
 //        }
 //    }
-
-
 }
