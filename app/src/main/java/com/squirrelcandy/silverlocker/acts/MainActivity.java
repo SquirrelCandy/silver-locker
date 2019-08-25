@@ -1,7 +1,10 @@
 package com.squirrelcandy.silverlocker.acts;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.FileUtils;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,10 +22,13 @@ import com.squirrelcandy.silverlocker.db.ItemDAO;
 import com.squirrelcandy.silverlocker.models.DataManager;
 import com.squirrelcandy.silverlocker.models.Item;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int FILE_SELECT_CODE = 101;
     private ListView listView;
     private FloatingActionButton fabAdd, fabImport, fabExport;
     private ArrayAdapter<String> adapter;
@@ -79,10 +86,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Import FAB kicks off Android File Chooser and passes in request code.
+         * A listener receives result and checks request code to know it is about this import.
+         * If the result is okay, get the file URI from the result.
+         */
         fabImport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO import code
+                toggleFabMenu();
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+                try {
+                    startActivityForResult(
+                            Intent.createChooser(intent, "Select a File to Upload"),
+                            FILE_SELECT_CODE);
+                } catch (android.content.ActivityNotFoundException e) {
+                    Toast.makeText(getApplicationContext(), "Please install a File Manager.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -149,6 +172,37 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    /**
+     * Activity Listener that receives some callback.
+     * File Chooser uses requestCode = 101 to receive file URI
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case FILE_SELECT_CODE:
+                if (resultCode == RESULT_OK) {
+                    // Get the Uri of the selected file
+                    Uri uri = data.getData();
+                    Log.d("FileChooser", "File Uri: " + uri.toString());
+                    // Get the path
+
+                    String path = null;
+                    try {
+                        path = DataManager.convertUriToPath(getApplicationContext(), uri);
+                        Log.d("FileChooser", "File Path: " + path);
+                        DataManager.importFile(new File(path));
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 //    private void requestPermission(Activity context) {
