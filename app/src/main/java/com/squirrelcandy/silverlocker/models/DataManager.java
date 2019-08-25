@@ -14,12 +14,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -44,12 +46,36 @@ public class DataManager {
         }
     }
 
-    public static void importFile(File file) {
-        
+    public static void importFile(Context context, File file) {
+        String ext = file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf("."));
+        Log.d("import", "File Extension = " + ext);
+        if ("txt".equalsIgnoreCase(ext)) {
+            importPipeDelimitedTextFile(context, file);
+        }else if ("csv".equalsIgnoreCase(ext)) {
+            importCSV(file);
+        }
     }
 
-    public void importPipeDelimitedFile() {
+    private static void importPipeDelimitedTextFile(Context context, File file) {
+        Log.d("import", "importing pipe delimied text file");
+        Log.d("import", "Path="+file.getAbsolutePath());
 
+        List<String> lines = readRawFile(file);
+        ItemDAO dao = new ItemDAO(context);
+
+        for (int i=1; i < lines.size(); i++) {
+            String pieces[] = lines.get(i).split("\\|");
+            Item item = new Item();
+            item.setName(pieces[0]);
+            item.setUsername(pieces[1]);
+            item.setEmail(pieces[2]);
+            item.setPassword(pieces[3]);
+        }
+    }
+
+    private static void importCSV(File file) {
+        Log.d("import", "importing CSV file");
+        Log.d("import", "Path="+file.getAbsolutePath());
     }
 
     public void exportCsvToExternalStorage(Context appContext){
@@ -109,28 +135,18 @@ public class DataManager {
         return null;
     }
 
-//    public void readRaw(){
-//        InputStream is = this.getResources().openRawResource(R.raw.textfile);
-//        InputStreamReader isr = new InputStreamReader(is);
-//        BufferedReader br = new BufferedReader(isr, 8192);    // 2nd arg is buffer size
-//
-//        // More efficient (less readable) implementation of above is the composite expression
-//    /*BufferedReader br = new BufferedReader(new InputStreamReader(
-//            this.getResources().openRawResource(R.raw.textfile)), 8192);*/
-//
-//        try {
-//            String test;
-//            while (true){
-//                test = br.readLine();
-//                // readLine() returns null if no more lines in the file
-//                if(test == null) break;
-//                tv.append("\n"+"    "+test);
-//            }
-//            isr.close();
-//            is.close();
-//            br.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private static List<String> readRawFile(File file){
+        List<String> lines = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+            }
+            br.close();
+        } catch (IOException e) {
+            //You'll need to add proper error handling here
+        }
+        return lines;
+    }
 }

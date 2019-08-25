@@ -190,12 +190,11 @@ public class MainActivity extends AppCompatActivity {
                     Uri uri = data.getData();
                     Log.d("FileChooser", "File Uri: " + uri.toString());
                     // Get the path
-
                     String path = null;
                     try {
                         path = DataManager.convertUriToPath(getApplicationContext(), uri);
                         Log.d("FileChooser", "File Path: " + path);
-                        DataManager.importFile(new File(path));
+                        DataManager.importFile(getApplicationContext(), new File(path));
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
                     }
